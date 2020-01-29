@@ -1,3 +1,6 @@
+# Rishabh Tewari
+# Machine Learning ECE 4332/5332
+# R11603985
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -16,15 +19,14 @@ t_target = carbig_data['Horsepower']
 X_predictor = np.reshape(X_predictor.values, (-1, 1))
 t_target = np.reshape(t_target.values, (-1, 1))
 
-
 # DEBUG: Check Shape of the predictor, and target variables
 # print("t_target shape(Initially):" + str(t_target.shape))
 # print("X_predictor shape(Initially):   " + str(X_predictor.shape))
 
 def closed_form_solution():
-    weight = np.dot(np.linalg.pinv(X_predictor), t_target)
-    weight = weight.T
-    predictor = weight*X_predictor
+    weight = np.dot(np.linalg.pinv(X_predictor), t_target) #The pseudinverse of X_predictor
+    weight = weight.T # Take transpose since te formula is y = w_t * x
+    predictor = weight*X_predictor # The prediction
 
     plt.title("Carbig Dataset, Closed Form\nMissing Values replaced by median, Rishabh Tewari")
     # plt.suptitle("Missing Values replaced by median, Rishabh Tewari")
