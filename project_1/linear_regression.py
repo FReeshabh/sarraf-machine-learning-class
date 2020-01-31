@@ -45,7 +45,7 @@ def closed_form_solution():
     
 # closed_form_solution()
 
-def grad(max_iterations, rho_learning_rate, weight, X_predictor, t_target):
+def gradient_descent(max_iterations, rho_learning_rate, weight, X_predictor, t_target): 
     gradient = 0
     prediction = weight.T* X_predictor
     for i in range(max_iterations):
@@ -65,10 +65,10 @@ def grad(max_iterations, rho_learning_rate, weight, X_predictor, t_target):
 
 init_weight = np.array([0.001, 0.001])
 init_weight = np.reshape(init_weight, (-1, 1))
-max_iterations = 1000 #(epochs)
+max_iterations = 1500 #(epochs)
 rho_learning_rate = 0.0000000001
 #grad(max_iterations, rho_learning_rate, init_weight, X_predictor, t_target)
 
 if __name__ == '__main__':
     Thread(target = closed_form_solution()).start()
-    Thread(target = grad(max_iterations, rho_learning_rate, init_weight, X_predictor, t_target)).start()
+    Thread(target = gradient_descent(max_iterations, rho_learning_rate, init_weight, X_predictor, t_target)).start()
