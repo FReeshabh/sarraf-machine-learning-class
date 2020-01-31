@@ -31,7 +31,7 @@ t_target = np.reshape(t_target.values, (-1, 1))
 #closed_form_graph = plt.figure()
 #gradient_descent_graph = plt.figure()
 
-def closed_form_solution():
+def closed_form_solution(X_predictor):
     weight = (np.linalg.pinv(X_predictor) @ t_target).T
     prediction = weight*X_predictor # The prediction
     
@@ -70,5 +70,5 @@ rho_learning_rate = 0.0000000001
 #grad(max_iterations, rho_learning_rate, init_weight, X_predictor, t_target)
 
 if __name__ == '__main__':
-    Thread(target = closed_form_solution()).start()
+    Thread(target = closed_form_solution(X_predictor)).start()
     Thread(target = gradient_descent(max_iterations, rho_learning_rate, init_weight, X_predictor, t_target)).start()
