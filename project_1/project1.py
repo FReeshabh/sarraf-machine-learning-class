@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from threading import Thread
 
 # Load the data
-carbig_filepath = "carbig.csv"
+carbig_filepath = "proj1Dataset.csv"
 carbig_data = pd.read_csv(carbig_filepath)
 
 # Assign Data to variables
@@ -32,12 +32,12 @@ def closed_form_solution(x, t):
     """
     weight = (np.linalg.pinv(x) @ t).T #the transpose of the final weight
     d_closed = np.linspace(1500, 5500, 3500)
-    print(weight.T)
+    # print(weight.T)
     prediction_closed = weight.T [0][0]*d_closed + weight.T[1][0]
     plt.title("Carbig Dataset, Closed Form\n Rishabh Tewari")
     plt.scatter(X[:,0], t, label="actual data")
-    plt.xlabel('Weight')
-    plt.ylabel('Horsepower')
+    plt.xlabel('X-Weight')
+    plt.ylabel('Y-Horsepower')
     plt.plot(d_closed, prediction_closed, color = "red", label="Closed Form Solution")
     plt.legend()
     plt.figure() 
@@ -47,18 +47,28 @@ def gradient_descent(iterations, rho, weight, x, t):
     """
     Gradient Descent Solution for the weight for Linear Regression
     """
+    
     for i in range(iterations):
-        gradient = ((2* weight.T @ x.T@ x ) - (2* t.T @ x)).T
-        weight = weight - (rho * gradient)
-        print("Iteration {} 's loss: {}".format(i, (np.square(np.linalg.norm(t - x @ weight)))))
+        pre_loss  = 10000
+        post_loss = 100000
+        if((post_loss - pre_loss) <= 0.000001):
+            print("Convergence Reached")
+            break
+        else:
+            pre_loss = (np.square(np.linalg.norm(t - x @ weight)))
+            gradient = ((2* weight.T @ x.T@ x ) - (2* t.T @ x)).T #Formula for gradient
+            weight = weight - (rho * gradient) #updating the weight
+            # print("Iteration {} 's loss: {}".format(i, (np.square(np.linalg.norm(t - x @ weight)))))
+            post_loss = (np.square(np.linalg.norm(t - x @ weight)))
+
     d_grad = np.linspace(1500, 5500, 3500)
     weight[0][0] = weight[0][0] / X.max()
     # print(weight)
     prediction_grad = weight.T [0][0]*d_grad + weight.T[0][1]
     plt.title("Carbig Dataset, Gradient Descent\n Rishabh Tewari")
     plt.scatter(X[:,0], t, label="actual data")
-    plt.xlabel('Weight')
-    plt.ylabel('Horsepower')
+    plt.xlabel('X-Weight')
+    plt.ylabel('Y-Horsepower')
     plt.plot(d_grad, prediction_grad, color = "green", label="Gradient Descent Solution")
     plt.legend()
     plt.show()
