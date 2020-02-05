@@ -32,48 +32,38 @@ def closed_form_solution(x, t):
     """
     weight = (np.linalg.pinv(x) @ t).T #the transpose of the final weight
     d_closed = np.linspace(1500, 5500, 3500)
-    # print(weight.T)
+    print(weight.T)
     prediction_closed = weight.T [0][0]*d_closed + weight.T[1][0]
     plt.title("Carbig Dataset, Closed Form\n Rishabh Tewari")
     plt.scatter(X[:,0], t, label="actual data")
-    plt.xlabel('X-Weight')
-    plt.ylabel('Y-Horsepower')
+    plt.xlabel('Weight')
+    plt.ylabel('Horsepower')
     plt.plot(d_closed, prediction_closed, color = "red", label="Closed Form Solution")
     plt.legend()
-    plt.figure() 
+    plt.figure()
 
 
 def gradient_descent(iterations, rho, weight, x, t):
     """
     Gradient Descent Solution for the weight for Linear Regression
     """
-    
     for i in range(iterations):
-        pre_loss  = 10000
-        post_loss = 100000
-        if((post_loss - pre_loss) <= 0.000001):
-            print("Convergence Reached")
-            break
-        else:
-            pre_loss = (np.square(np.linalg.norm(t - x @ weight)))
-            gradient = ((2* weight.T @ x.T@ x ) - (2* t.T @ x)).T #Formula for gradient
-            weight = weight - (rho * gradient) #updating the weight
-            # print("Iteration {} 's loss: {}".format(i, (np.square(np.linalg.norm(t - x @ weight)))))
-            post_loss = (np.square(np.linalg.norm(t - x @ weight)))
-
+        gradient = ((2* weight.T @ x.T@ x ) - (2* t.T @ x)).T
+        weight = weight - (rho * gradient)
+        print("Iteration {} 's loss: {}".format(i, (np.square(np.linalg.norm(t - x @ weight)))))
     d_grad = np.linspace(1500, 5500, 3500)
     weight[0][0] = weight[0][0] / X.max()
     # print(weight)
     prediction_grad = weight.T [0][0]*d_grad + weight.T[0][1]
     plt.title("Carbig Dataset, Gradient Descent\n Rishabh Tewari")
     plt.scatter(X[:,0], t, label="actual data")
-    plt.xlabel('X-Weight')
-    plt.ylabel('Y-Horsepower')
+    plt.xlabel('Weight')
+    plt.ylabel('Horsepower')
     plt.plot(d_grad, prediction_grad, color = "green", label="Gradient Descent Solution")
     plt.legend()
     plt.show()
 
-# Initial Assumptions made        
+# Initial Assumptions made
 init_weight = np.array([0, 0])
 init_weight = np.reshape(init_weight, (-1, 1))
 max_iterations = 1000 #(epochs)
@@ -86,5 +76,4 @@ rho_learning_rate = 0.001
 if __name__ == '__main__':
     Thread(target = closed_form_solution(X, t_target)).start()
     Thread(target = gradient_descent(max_iterations, rho_learning_rate, init_weight, X_norm, t_target))
-
 
