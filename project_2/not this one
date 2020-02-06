@@ -1,0 +1,170 @@
+import matplotlib.pyplot as plt
+import numpy as np
+from sklearn.preprocessing import PolynomialFeatures
+
+np.random.seed(0)
+# X_train
+X_train = np.random.uniform(low=0.0, high=1.0, size = 10)
+X_train = np.reshape(X_train, (-1, 1))
+
+#t_train
+t_train = (np.sin(2 * (np.pi) * X_train)) + (np.random.normal(loc = 0.0, scale = 0.3))
+t_train = t_train[:,0]
+t_train = np.reshape(t_train, (-1, 1))
+
+#X_test
+X_test = np.random.uniform(low=0.0, high=1.0, size = 100)
+X_test = np.reshape(X_test, (-1, 1))
+
+# Generate testing t
+t_test = (np.sin(2 * (np.pi) * X_test)) + (np.random.normal(loc = 0.0, scale = 0.3))
+t_test = t_test[:,0]
+t_test = np.reshape(t_test, (-1, 1))
+
+def phi(x, y, deg):
+    if(deg < 1):
+        x = x
+    else:
+        poly = PolynomialFeatures(degree=deg)
+        x = poly.fit_transform(x)
+        # poly.fit(x, y)
+    return x
+print(phi(X_train, t_train, 2))
+
+print(np.polynomial.polynomial.polyfit(X_train, t_train, 2, full=True))
+# print(phi(X_train, 2))
+def linear_regression(x, t, deg):
+    x = phi(x, deg)
+    weight = ((np.linalg.pinv(x))@t).T
+    # d_closed = np.linspace(0, 1, 1, dtype=float)
+    prediction_closed = weight.T [0][0]*x + weight.T[1][0]
+    print(prediction_closed)
+    error = np.square(np.linalg.norm(prediction_closed, ord = 2))
+    plt.scatter(X_train, t_train, label="actual data")
+    plt.xlabel('Weight')
+    plt.ylabel('Horsepower')
+    # plt.plot(X_train, prediction_closed, color = "red", label="Closed Form Solution")
+    plt.legend()
+    # plt.figure()
+    # plt.show()
+
+    # print(error)
+
+# linear_regression(X_train, t_train, 1)
+#poly = PolynomialFeatures(2)
+#x = poly.fit_transform(X_train)
+#weight = (np.linalg.pinv(x) @ t_train).T
+#print(weight.shape, x.shape)
+#y = weight@x
+#plt.scatter(X_train, t_train, label="actual data")
+#plt.xlabel('Weight')
+#plt.ylabel('Horsepower')
+#plt.plot(x, y, color = "red", label="Closed Form Solution")
+#plt.legend()
+## plt.figure()
+#plt.show()
+
+
+# print(y)
+
+# def closed_form_solution(x, t, deg):
+#     """
+#     Analytical Solution for the weight for Linear Regression
+#     """
+#     poly = PolynomialFeatures(deg)
+#     x = poly.fit_transform(x)
+#     weight = (np.linalg.pinv(x) @ t).T #the transpose of the final weight
+#     d_closed = np.linspace(1500, 5500, 3500)
+#     print(weight.T)
+#     prediction_closed = weight.T [0][0]*d_closed + weight.T[1][0]
+#     plt.title("Linear Regression with Non Linear Models")
+#     plt.scatter(X_train[:,0], t, label="actual data")
+#     plt.xlabel('Weight')
+#     plt.ylabel('Horsepower')
+#     plt.plot(d_closed, prediction_closed, color = "red", label="Closed Form Solution")
+#     plt.legend()
+#     # plt.figure()
+#     plt.show()
+
+# closed_form_solution(X_train, t_train, 6)
+# plt.title("Training and testing data scatterplot")
+# plt.scatter(X_train, t_train, label = "Training Data", c = 'red')
+# plt.scatter(X_test, t_test, label = "Testing Data", c = 'blue')
+# plt.plot(X_train, prediction, label = "Prediction - training", c='green')
+# # plt.plot(X_test, prediction_, label = "Prediction - testing", c = 'yellow')
+# plt.xlabel('X')
+# plt.ylabel('t')
+# plt.legend()
+# 
+# 
+# plt.show()
+
+#def phi(x, degree):
+#    poly_Arr = np.array([1, x, x**2, x**3, x**4, x**5, x**6, x**7, x**8, x**9])
+#    feature_vector = poly_Arr[:degree]
+#    # feature_vector = np.reshape(feature_vector, (-1, 1))
+#    feature_vector = np.hstack((x, np.ones(x.shape)))
+#    print(feature_vector.shape)
+#    # return feature_vector
+#
+# phi(X_train, 4)
+
+
+
+
+# # ef linear_regression(train_X, train_t, deg):
+# poly = PolynomialFeatures(6)
+# poly = poly.fit_transform(X_train)
+# print(poly)
+
+# weight = ((np.linalg.pinv(poly))@t_train).T
+# print(weight)
+
+# prediction = weight * X_train
+# prediction_ = weight * X_test
+# hypothesis = prediction - t_train
+# hypothesis_t = prediction_ - t_test
+# print(prediction)
+
+# error = np.square(np.linalg.norm(hypothesis, ord = 2))
+# error_ = np.square(np.linalg.norm(hypothesis_t, ord = 2))
+# print(error)
+# print(error_)
+
+
+def closed_form_solution(x, t):
+    """
+    Analytical Solution for the weight for Linear Regression
+    """
+    # Poly = PF(degree = 1)
+    # x = Poly.fit_transform(x)
+    # x = np.hstack((x, np.ones(x.shape)))
+
+    x = np.polynomial.polynomial.polypow(x, 1)
+    weight = (np.linalg.pinv(x) @ t).T #the transpose of the final weight
+    d_closed = np.linspace(0, 1, 1)
+    print(weight.T)
+    prediction_closed = weight.T [0][0]*d_closed + weight.T[1][0]
+    plt.title("Linear Regression with Non Linear Models")
+    plt.scatter(X_train[:,0], t, label="actual data")
+    plt.xlabel('Weight')
+    plt.ylabel('Horsepower')
+    plt.plot(d_closed, prediction_closed, color = "red", label="Closed Form Solution")
+    plt.legend()
+    plt.show()
+    # plt.figure()
+
+closed_form_solution(X_train, t_train)
+# prediction = (weight.T)*(phi(X_train, deg) * phi(X_train, deg))
+# prediction = (weight.T)[0]0]*d*(phi(X_train, deg) * X_train)
+
+
+deg = 5
+weight = np.dot(np.linalg.pinv(phi(X_train, deg)), t_train)
+pred1 = np.dot(phi(X_train, deg), weight)
+print(E_rms(pred1, t_train, 10))
+# d= np.linspace(0, 1, 10)
+# hypothesis = prediction - t_train
+# loss = np.square(np.linalg.norm(hypothesis, ord = 2))
+
+# print(weight)
