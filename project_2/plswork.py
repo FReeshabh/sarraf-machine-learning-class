@@ -19,10 +19,21 @@ X_test = np.reshape(X_test, (-1, 1))
 t_test = (np.sin(2 * (np.pi) * X_test)) + (np.random.normal(loc = 0.0, scale = 0.3))
 
 def phi(x, degree):
-    feature_v = np.column_stack((np.ones(x.shape), x**2, x**3, x**4, x**5, x**6, x**7, x**8, x**9))
+    feature_v = np.column_stack((np.ones(x.shape), x, x**2, x**3, x**4, x**5, x**6, x**7, x**8, x**9))
     feature_v = feature_v[:,:degree+1]
-    print(feature_v)
+    # feature_v = np.fliplr(feature_v)
+    return feature_v
 
-dummy = np.array([[1, 2, 3], [4,5,6]])
-phi(X_train, 4)
 
+def linear_regression_with_non_linear_model(training_X, training_t, testing_X, testing_t, deg):
+    graph_X = np.linspace(0, 1, 10)
+    graph_X = np.reshape(graph_X, (-1, 1))
+    training_design_matrix = phi(training_X, deg)
+    print(training_design_matrix.shape)
+    weight = (np.linalg.pinv(training_design_matrix) @ training_t)
+    print("Shape of Weight" + str(weight.shape))
+    loss = np.linalg.norm((t_train-(training_design_matrix @ weight)), 2) # loss will for the design matrix
+    error = loss/10
+    print("Traning Loss: " + str(error) + " for degree " + str(deg))
+
+linear_regression_with_non_linear_model(X_train, t_train, X_test, t_test, 9)

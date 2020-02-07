@@ -91,3 +91,37 @@ def simple_linear_regression_closed_form_solution(x, t):
 
 
 # simple_linear_regression_closed_form_solution(X_train, t_train)
+    feature_v = list(feature_v)
+    feature_v = feature_v[:degree]
+    feature_v = np.asarray(feature_v)
+    print(feature_v.shape)
+
+    # x = np.array([X_train])
+
+def simple_linear_regression_closed_form_solution(x, t, deg):
+    """
+    Analytical Solution for the weight for Linear Regression
+    """
+    x = phi(x, deg)
+    print(x.shape)
+    print(t.shape)
+    weight = (np.linalg.pinv(x) @ t).T #the transpose of the final weight
+    print(weight.shape)
+    d_closed = np.random.uniform(low = 0.0, high = 1.0, size = 10)#np.linspace(0, 1, 10)
+    d_closed = phi(d_closed, deg)
+    # prediction_closed = weight.T [0][0]*d_closed + weight.T[1][0]
+    prediction_closed = weight @ x
+    print(prediction_closed)
+    print(np.linalg.norm((prediction_closed - t), ord = 2))
+    # plt.scatter(X_train[:,0], t_train, label="actual data")
+    plt.plot(d_closed, prediction_closed, color = "red", label="Closed Form Solution for Training")
+    plt.legend()
+    plt.title("Linear Regression with Non Linear Models")
+    plt.scatter(X_train, t_train, label="Training data")
+    plt.scatter(X_test[:,0], t_test, label="Testing data")
+    plt.xlabel('X')
+    plt.ylabel('t')
+    plt.legend()
+    plt.show()
+
+simple_linear_regression_closed_form_solution(X_train, t_train, 4)
