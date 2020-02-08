@@ -31,7 +31,7 @@ def phi(x, degree):
 # Returns the training and testing cost 
 def linear_regression_with_non_linear_model(training_X, training_t, testing_X, testing_t, deg):
     phi_training_X = phi(training_X, deg)
-    phi_training_X = phi_training_X/(phi_training_X.max())
+    phi_training_X = phi_training_X/(phi_training_X.max()) # Normalize for no reason?
     phi_testing_X  = phi(testing_X, deg)
     phi_testing_X = phi_testing_X/(phi_training_X.max())
 
@@ -40,9 +40,6 @@ def linear_regression_with_non_linear_model(training_X, training_t, testing_X, t
     testing_cost  = np.sqrt((np.linalg.norm((testing_t - (phi_testing_X @ weight))**2)  ) / N_train)
 
     return training_cost, testing_cost
-
-# for i in range(10):
-    # print(linear_regression_with_non_linear_model(X_train, t_train, X_test, t_test, i))
 
 def graph_loss(training_X, training_t, testing_X, testing_t):
     train_error = np.zeros(10)
@@ -57,8 +54,8 @@ def graph_loss(training_X, training_t, testing_X, testing_t):
     plt.plot(graph_dim, train_error, label = "training error", marker = "X", color = "blue")
     plt.plot(graph_dim, test_error, label = "testing error",   marker = "X", color = "red")
     plt.ylim(bottom = 0, top = 1) # Set the limit for Y Axis of the graph
-    plt.xlabel('M')
-    plt.ylabel('$E_{rms}$')
+    plt.xlabel('M - The complexity of the model')
+    plt.ylabel('$E_{rms}$ - The Error')
     plt.legend()
     plt.show()
 
