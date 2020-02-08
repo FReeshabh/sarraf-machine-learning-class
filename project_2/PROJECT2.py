@@ -109,8 +109,8 @@ def simple_linear_regression_closed_form_solution(x, t, deg):
     print(weight.shape)
     d_closed = np.random.uniform(low = 0.0, high = 1.0, size = 10)#np.linspace(0, 1, 10)
     d_closed = phi(d_closed, deg)
-    # prediction_closed = weight.T [0][0]*d_closed + weight.T[1][0]
-    prediction_closed = weight @ x
+    prediction_closed = weight.T [0][0]*d_closed + weight.T[1][0]
+    # prediction_closed = weight @ x
     print(prediction_closed)
     print(np.linalg.norm((prediction_closed - t), ord = 2))
     # plt.scatter(X_train[:,0], t_train, label="actual data")
@@ -125,3 +125,23 @@ def simple_linear_regression_closed_form_solution(x, t, deg):
     plt.show()
 
 simple_linear_regression_closed_form_solution(X_train, t_train, 4)
+
+    # plt.plot(graph_X, predicted, color = "red", label="Closed Form Solution for Training")
+    # plt.legend()
+    # plt.title("Linear Regression with Non Linear Models")
+    # plt.scatter(X_train, t_train, label="Training data")
+    # plt.scatter(X_test[:,0], t_test, label="Testing data")
+    # plt.xlabel('X')
+    # plt.ylabel('t')
+    # plt.legend()
+    # plt.show()
+
+# training_loss, testing_loss = 10000, 10000
+#    training_arr = np.empty(training_X.shape)
+#    testing_arr = np.empty(testing_X.shape)
+#    for deg in range(10):
+#        training_loss, testing_loss = linear_regression_with_non_linear_model(training_X, training_t, testing_X, testing_t, deg)
+#        np.append(training_arr, training_loss)
+#        # np.append(testing_arr, testing_loss)
+#    print(training_arr)
+#    # print(testing_arr)
