@@ -2,8 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 #To Ensure Results don't change
-np.random.seed(seed = 1)
-N_train = 10
+np.random.seed(seed = 138) #138
+N_train = 100
 #Training X with 10 samples
 X_train = np.random.uniform(low = 0.0, high = 1.0, size = N_train)
 X_train = np.reshape(X_train, (-1, 1))
@@ -25,20 +25,20 @@ def phi(x, degree):
 
 def linear_regression_with_non_linear_model(training_X, training_t, testing_X, testing_t, deg):
     weight = (np.linalg.pinv(phi(training_X, deg))) @ training_t
-    
+
     training_prediction =   (phi(training_X, deg)) @ weight 
     testing_prediction  =   (phi(testing_X, deg))  @ weight 
 
     J_training = np.linalg.norm(training_t - training_prediction)
-    J_testing = np.linalg.norm(testing_t - testing_prediction)
+    J_testing  = np.linalg.norm(testing_t - testing_prediction)
 
-    # train_Erms = np.sqrt(J_training/np.sqrt(len(training_X)))
-    # test_Erms =  np.sqrt(J_testing/np.sqrt(len(testing_X)))
-    train_Erms = np.sqrt(J_training/(len(training_X)))
-    test_Erms =  np.sqrt(J_testing/len(testing_X))
+    train_Erms = (J_training/np.sqrt((len(training_X))))
+    test_Erms =  (J_testing/ np.sqrt(len(testing_X)))
+
+    # testing_loss = np.linalg.norm((testing_t - (phi(training_X, deg) @ weight)), 2) / np.sqrt(len(testing_X))
 
 
-    return train_Erms, test_Erms
+    return train_Erms, test_Erms#, testing_loss
 
 
 
@@ -53,8 +53,8 @@ def graph_loss(training_X, training_t, testing_X, testing_t):
     test_error = np.reshape(test_error, (-1, 1))
     graph_dim = np.linspace(0, 10, 10)
     plt.title("10 training samples, Errors")
-    plt.plot(graph_dim, train_error, label = "training error")
-    plt.plot(graph_dim, test_error, label = "testing error")
+    plt.plot(graph_dim, train_error, label = "training error", marker = "o")
+    plt.plot(graph_dim, test_error, label = "testing error", marker = "o")
     plt.ylim(bottom = 0, top = 1)
     plt.xlabel('M')
     plt.ylabel('E_rms')
