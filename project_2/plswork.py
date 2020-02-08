@@ -29,15 +29,16 @@ def phi(x, degree):
 
 def linear_regression_with_non_linear_model(training_X, training_t, testing_X, testing_t, deg):
     training_design_matrix_X = phi(training_X, deg)
+    testing_design_matrix_X = phi(testing_X, deg)
     weight = (np.linalg.pinv(training_design_matrix_X) @ training_t)
     training_loss = (np.linalg.norm((t_train-(training_design_matrix_X @ weight)), 2)/np.sqrt(len(training_X))) # loss will for the design matrix
-
-    testing_design_matrix_X = phi(testing_X, deg)
-    # testing_loss = (np.linalg.norm((testing_t-(testing_design_matrix_X @ weight)), 2)/np.sqrt(len(testing_X))) # loss will for the design matrix
-    testing_loss = np.linalg.norm((testing_t - (testing_design_matrix_X @ weight)), 2) / np.sqrt(len(testing_X))
+    testing_loss = np.linalg.norm((testing_t - (testing_design_matrix_X @ weight)), 2) / np.sqrt(len(testing_X)) 
+    # XXX training_loss = (np.linalg.norm((t_train-(training_design_matrix_X @ weight)), 2))/np.sqrt(len(training_X))# loss will for the design matrix
+    # XXX   testing_loss = np.linalg.norm((testing_t - (testing_design_matrix_X @ weight)), 2) / np.sqrt(len(testing_X)) 
     return training_loss, testing_loss
 
 
+    # testing_loss = (np.linalg.norm((testing_t-(testing_design_matrix_X @ weight)), 2)/np.sqrt(len(testing_X))) # loss will for the design matrix
 
 def graph_loss(training_X, training_t, testing_X, testing_t):
     train_error = np.zeros(10)
@@ -50,10 +51,10 @@ def graph_loss(training_X, training_t, testing_X, testing_t):
     test_error = np.reshape(test_error, (-1, 1))
     graph_dim = np.linspace(0, 10, 10)
     plt.title("100 training samples, Errors")
-    plt.plot(graph_dim, train_error, label = "training error")
-    plt.plot(graph_dim, test_error, label = "testing error")
+    plt.plot(graph_dim, train_error, label = "training error", marker = "o")
+    plt.plot(graph_dim, test_error, label = "testing error", marker = "o")
     plt.xlabel('M')
-    plt.ylabel('E_rms')
+    plt.ylabel('$E_{rms}$')
     plt.legend()
     plt.show()
 
