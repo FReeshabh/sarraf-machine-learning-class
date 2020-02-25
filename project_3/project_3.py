@@ -10,6 +10,7 @@ np.random.seed(seed = 200)
 # Size of the Datasets
 N_train = 25
 Big_dataset = []
+# Big_dataset = np.empty()
 
 for i in range(100):
     """
@@ -22,4 +23,24 @@ for i in range(100):
     np.savetxt(file_name, Dataset, delimiter=",", fmt='%s')
     Big_dataset.append(Dataset)
 
-print(Big_dataset)    
+Big_dataset_np = np.asarray(Big_dataset)
+print(Big_dataset_np)
+
+def gauss(X):
+    mean = np.mean(X)
+    stddev = np.std(X)
+    rbf = np.exp((- np.square(X - mean)) / (2 * np.square(stddev)) )
+    return rbf
+
+# print(Big_dataset_np[1])
+
+# def phi(X):
+#     Xer = np.array(2500)
+#     for L in range(100):
+#         for N in range(25):
+#             XtoChange = X[L, N, 1]
+#             mean = np.mean()
+#             Xer = np.append(Xer, XtoChange)
+#     print(Xer.shape)
+
+# phi(Big_dataset_np)
