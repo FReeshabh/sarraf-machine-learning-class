@@ -1,44 +1,90 @@
-#Rishabh Tewari
+# Rishabh Tewari
 # R11603985
 # Machine Learning Project 3
 import numpy as np
 import matplotlib.pyplot as plt
-import pandas as pd
 
 np.random.seed(seed = 200)
 
-# Size of the Datasets
-N_train = 25
-Big_dataset = []
+"""
+a. 𝐿 = 100
+b. 𝑁 = 25
+c. 𝑋 contains samples from a uniform distribution U(0,1).
+d. 𝑡 = sin(2𝜋) + 𝜀, where 𝜀 contains samples from a Gaussian distribution
+N(0, 𝜎 =0.3).
+"""
+L_datasets = 100
+N_datapoints = 25
+
 Big_X = []
+Big_t = []
 
-for i in range(100):
-    """
-    Create the Datasets and generate csv files from the generated datasets
-    """
-    X = np.random.uniform(low = 0.0, high = 1.0, size = N_train)
+# Generate the datasets Required
+for i in range(L_datasets):
+    # generate the X and t
+    X = np.random.uniform(low = 0.0, high = 1.0, size = N_datapoints)
+    t = (np.sin(2 * (np.pi) * X)) + (np.random.normal(loc = 0.0, scale = 0.3, size = X.shape))
+    # Insert the X and t into lists
     Big_X.append(X)
-    t_train = (np.sin(2 * (np.pi) * X)) + (np.random.normal(loc = 0.0, scale = 0.3, size = X.shape))
-    Dataset = np.stack((X, t_train), axis = -1)
-    file_name = "data_" + str(i) + ".csv"
-    np.savetxt(file_name, Dataset, delimiter=",", fmt='%s')
-    Big_dataset.append(Dataset)
+    Big_t.append(t)
 
-Big_dataset_np = np.asarray(Big_dataset)
-Big_X_np = np.asarray(Big_X)
-print(Big_X_np.shape)
+# Convert the lists into numpy array
+Big_X = np.asarray(Big_X)
+Big_t = np.asarray(Big_t)
 
-# for i in range(100):
-def gauss(X):
-    dataset = X[0, :] #[i, :]
-    mean   = np.mean(dataset)
-    stddev = np.std(dataset)
-    rbf = np.exp((-(np.square(dataset - mean)/(2*np.square(stddev)))))
+def phi_rbf(input_X):
+    stddev = np.std(input_X)
+    mean   = np.mean(input_X)
+    rbf = np.exp((-(np.square(input_X - mean)/(2*np.square(stddev))))) # The radial Basis Function
     rbf = np.reshape(rbf, (-1, 1))
-    rbf = np.column_stack((np.ones(rbf.shape), rbf))
+    rbf = np.column_stack((np.ones(rbf.shape), rbf)) # Add a column of ones
     return rbf
 
-print(gauss(Big_X_np))
+RBF = []
+for i in range(L_datasets):
+    RBF.append(phi_rbf(Big_X[i, :])) # Add the phi(x) to RBF
+
+RBF = np.asarray(RBF) # Convert RBF into a numpy array
+
+# # Size of the Datasets
+# N_train = 25
+# Big_dataset = []
+# Big_X = []
+# Big_T = []
+
+# for i in range(100):
+#     """
+#     Create the Datasets and generate csv files from the generated datasets
+#     """
+#     X = np.random.uniform(low = 0.0, high = 1.0, size = N_train)
+#     Big_X.append(X)
+#     t_train = (np.sin(2 * (np.pi) * X)) + (np.random.normal(loc = 0.0, scale = 0.3, size = X.shape))
+#     Big_T.append(t_train)
+#     Dataset = np.stack((X, t_train), axis = -1)
+#     file_name = "data_" + str(i) + ".csv"
+#     np.savetxt(file_name, Dataset, delimiter=",", fmt='%s')
+#     Big_dataset.append(Dataset)
+
+# Big_dataset_np = np.asarray(Big_dataset)
+# Big_X_np = np.asarray(Big_X)
+# Big_T_np = np.asarray(Big_T)
+# # print(Big_T_np.shape)
+
+
+# def gauss(X):
+#     dataset = X[0, :] #[i, :]
+#     mean   = np.mean(dataset)
+#     stddev = np.std(dataset)
+#     rbf = np.exp((-(np.square(dataset - mean)/(2*np.square(stddev)))))
+#     rbf = np.reshape(rbf, (-1, 1))
+#     rbf = np.column_stack((np.ones(rbf.shape), rbf))
+#     return rbf
+
+# def linear_regression():
+#     lambdaX = 0.1
+#     weight = ((gauss(Big_X_np)).T @ Big_T_np[0, :]) + lambdaX
+
+# print(gauss(Big_X_np))
 
 # def gauss(X):
 #     mean = np.mean(X)
