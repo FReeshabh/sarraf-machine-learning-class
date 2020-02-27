@@ -13,16 +13,16 @@ c. 𝑋 contains samples from a uniform distribution U(0,1).
 d. 𝑡 = sin(2𝜋) + 𝜀, where 𝜀 contains samples from a Gaussian distribution
 N(0, 𝜎 =0.3).
 """
-L_datasets = 100
-N_datapoints = 25
+L_DATASETS = 100
+N_DATAPOINTS = 25
 
 Big_X = []
 Big_t = []
 
 # Generate the datasets Required
-for i in range(L_datasets):
+for i in range(L_DATASETS):
     # generate the X and t
-    X = np.random.uniform(low = 0.0, high = 1.0, size = N_datapoints)
+    X = np.random.uniform(low = 0.0, high = 1.0, size = N_DATAPOINTS)
     t = (np.sin(2 * (np.pi) * X)) + (np.random.normal(loc = 0.0, scale = 0.3, size = X.shape))
     # Insert the X and t into lists
     Big_X.append(X)
@@ -32,19 +32,27 @@ for i in range(L_datasets):
 Big_X = np.asarray(Big_X)
 Big_t = np.asarray(Big_t)
 
-def phi_rbf(input_X):
-    stddev = np.std(input_X)
-    mean   = np.mean(input_X)
-    rbf = np.exp((-(np.square(input_X - mean)/(2*np.square(stddev))))) # The radial Basis Function
-    rbf = np.reshape(rbf, (-1, 1))
-    rbf = np.column_stack((np.ones(rbf.shape), rbf)) # Add a column of ones
-    return rbf
+def phi_basis(X):
+    phier = []
+    stddev = 0.1
+    for i in range (L_DATASETS):
+        for j in range(N_DATAPOINTS):
 
-RBF = []
-for i in range(L_datasets):
-    RBF.append(phi_rbf(Big_X[i, :])) # Add the phi(x) to RBF
-
-RBF = np.asarray(RBF) # Convert RBF into a numpy array
+def linear_regression(x):
+    weight = (np.linalg.inv((x.T@x)))
+# def phi_rbf(input_X):
+#     stddev = 0.1 #np.std (Big_X)
+#     mean   = np.
+#     rbf = np.exp((-(np.square(input_X - mean)/(2*np.square(stddev))))) # The radial Basis Function
+#     rbf = np.reshape(rbf, (-1, 1))
+#     rbf = np.column_stack((np.ones(rbf.shape), rbf)) # Add a column of ones
+#     return rbf
+# 
+# RBF = []
+# for i in range(L_datasets):
+#     RBF.append(phi_rbf(Big_X[i, :])) # Add the phi(x) to RBF
+# 
+# RBF = np.asarray(RBF) # Convert RBF into a numpy array
 
 # # Size of the Datasets
 # N_train = 25
