@@ -36,7 +36,9 @@ def phi_basis(X):
     phier = []
     stddev = 0.1
     for i in range (L_DATASETS):
+        input_X = r
         for j in range(N_DATAPOINTS):
+    rbf = np.exp((-(np.square(input_X - mean)/(2*np.square(stddev))))) # The radial Basis Function
 
 def linear_regression(x):
     weight = (np.linalg.inv((x.T@x)))

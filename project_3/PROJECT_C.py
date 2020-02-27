@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 L_DATASETS = 100
 N_DATAPOINTS = 25
@@ -19,21 +20,19 @@ for i in range(L_DATASETS):
 Big_X = np.asarray(Big_X)
 Big_t = np.asarray(Big_t)
 
-print(Big_X.shape)
+def gauss_radial_basis(in_x):
+    stddev = np.square(0.1)
 
-rbf = []
-stddev = 0.1
-for i in range(L_DATASETS):
-    gauss = []
-    curr_dataset = Big_X[i,:]
-    curr_dataset = np.reshape(curr_dataset, (-1, 1))
-    for j in range(N_DATAPOINTS):
-        curr_dataset_point = curr_dataset[j]
-        rbf_curr = np.exp((-(np.square(curr_dataset_point - curr_dataset)) / (2 * np.square(stddev))))
-        gauss.append(rbf_curr)
-    rbf.append(gauss)
+    for i in range(L_DATASETS):
+        curr_set = np.reshape(in_x[i, :], (-1, 1))
+        curr_set = np.linspace(0, 1, 25)
+        for j in range(N_DATAPOINTS-5):
+            curr_datapoint = curr_set[j]
+            # curr_datapoint = np.exp((-(np.square(curr_datapoint - curr_set)) / (2 * np.square(stddev))))
+            curr_datapoint = np.exp((-np.square(curr_datapoint - curr_set)/(stddev * 2)))
+    # curr_datapoint = np.column_stack((np.ones(curr_datapoint.shape), curr_datapoint))
 
-gauss = np.asarray(gauss)
-gauss = gauss[:, :, 0]
-gauss = np.column_stack((np.ones(gauss[0].shape), gauss))
-print(gauss)
+    return curr_datapoint
+print(gauss_radial_basis(Big_X).shape)
+plt.plot(gauss_radial_basis(Big_X))
+plt.show()
