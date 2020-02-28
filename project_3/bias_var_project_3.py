@@ -34,13 +34,35 @@ def radial_basis_individual(a_dataset):
 
 # print(radial_basis_individual(Big_X[1]).shape)
 # plt.plot(radial_basis_individual(Big_X[2])[2]) ##IMPORTANT: DON'T DELETE, L, N
-jox = radial_basis_individual(Big_X[1])
-jot = Big_t[1]
-# print(jox.shape)
-lambda_reg = 0.1
-weight =  (jox.T @ jox)   
-chock = (np.eye(26) * lambda_reg)
-weight = ((np.linalg.inv(weight + chock)) @ jox.T) @ jot
-weight = np.reshape(weight, (-1, 1))
-print(weight)
-    
+# plt.show()
+
+# jox = radial_basis_individual(Big_X[1])
+# jot = Big_t[1]
+# print(Big_X[1].shape)
+# lambda_reg = 0.1
+# weight =  (jox.T @ jox)   
+# chock = (np.eye(26) * lambda_reg)
+# weight = ((np.linalg.inv(weight + chock)) @ jox.T) @ jot
+# weight = np.reshape(weight, (-1, 1))
+# print(weight.shape)
+# prediction = ((Big_X[1]) @ weight)
+# print(prediction.shape)
+
+def linear_reg_with_regu(Xdataset, tDataset, reg_constant):
+    lambda_reg = (np.eye(26) * reg_constant)
+    predictions = []
+    for i in range(L_DATASETS):
+        # Xdataset = np.reshape(Xdataset, (-1, 1))
+        gauss_phi = radial_basis_individual(Xdataset[i])
+        target = tDataset[i]
+        weight = np.linalg.inv((gauss_phi.T @ gauss_phi) + lambda_reg)
+        weight = weight @ gauss_phi.T 
+        weight = weight @ target
+        # weight = ((np.linalg.inv((gauss_phi.T @ gauss_phi) + lambda_reg)) @ gauss_phi.T) @ target
+        weight = np.reshape(weight, (-1, 1))
+        prediction = ((gauss_phi @ weight))
+        predictions.append(prediction)
+
+    predictions = np.asarray(predictions)
+    return predictions
+print(linear_reg_with_regu(Big_X, Big_t, 1).shape)
