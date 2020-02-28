@@ -20,35 +20,38 @@ for i in range(L_DATASETS):
 Big_X = np.asarray(Big_X)
 Big_t = np.asarray(Big_t)
 
-# def gauss_radial_basis(in_x):
-#     stddev = np.square(0.1)
-#     bigger_chonk = []
-#     for i in range(L_DATASETS):
-#         curr_set = np.reshape(in_x[i, :], (-1, 1))
-#         curr_set = np.linspace(0, 1, 25)
-#         chonk = []
-#         for j in range(N_DATAPOINTS):
-#             curr_datapoint = curr_set[j]
-#             curr_datapoint = np.exp((-np.square(curr_datapoint - curr_set)/(stddev * 2)))
-#             chonk.append((curr_datapoint))
-#         bigger_chonk.append(chonk)
-#     
-#     chonk = np.asarray(chonk)
-#     bigger_chonk = np.asarray(bigger_chonk)
-#     return bigger_chonk
-
+#def gauss_radial_basis(in_x):
+#    stddev = np.square(0.1)
+#    bigger_chonk = []
+#    for i in range(L_DATASETS):
+#        curr_set = np.reshape(in_x[i, :], (-1, 1))
+#        curr_set = np.linspace(0, 1, 25)
+#        chonk = []
+#        for j in range(N_DATAPOINTS):
+#            curr_datapoint = curr_set[j]
+#            curr_datapoint = np.exp((-np.square(curr_datapoint - curr_set)/(stddev * 2)))
+#            chonk.append((curr_datapoint))
+#        bigger_chonk.append(chonk)
+#    
+#    chonk = np.asarray(chonk)
+#    bigger_chonk = np.asarray(bigger_chonk)
+#    return bigger_chonk
+print(Big_X.shape)
 def individual_gauss(in_x):
     variance = np.square(0.1)
     gauss_basis_list = []
+    curr_set = np.linspace(0, 1, 25)
     for i in range(N_DATAPOINTS):
         curr_datapoint = in_x[i]
-        curr_datapoint = np.exp((-np.square(curr_datapoint - in_x)/(variance * 2)))
+        curr_datapoint = np.exp((-np.square(curr_datapoint - curr_set)/(variance * 2)))
         gauss_basis_list.append(curr_datapoint)
     gauss_basis_list = np.asarray(gauss_basis_list)
     feature_vector = np.column_stack((np.ones(25), gauss_basis_list))
     return feature_vector
 print(individual_gauss(Big_X[1]).shape)
 
+plt.plot(individual_gauss(Big_X[1, :]))
+plt.show()
 
 
 def linear_regression():
