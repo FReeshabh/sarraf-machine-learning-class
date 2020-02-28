@@ -38,16 +38,16 @@ Big_t = np.asarray(Big_t)
 #     return bigger_chonk
 
 def individual_gauss(in_x):
-    stddev = np.square(0.1)
-    chonker = []
+    variance = np.square(0.1)
+    gauss_basis_list = []
     for i in range(N_DATAPOINTS):
         curr_datapoint = in_x[i]
-        curr_datapoint = np.exp((-np.square(curr_datapoint - in_x)/(stddev * 2)))
-        chonker.append(curr_datapoint)
-    chonker = np.asarray(chonker)
-    feature_vector = np.column_stack((np.ones(25), chonker))
+        curr_datapoint = np.exp((-np.square(curr_datapoint - in_x)/(variance * 2)))
+        gauss_basis_list.append(curr_datapoint)
+    gauss_basis_list = np.asarray(gauss_basis_list)
+    feature_vector = np.column_stack((np.ones(25), gauss_basis_list))
     return feature_vector
-print(individual_gauss(X).shape)
+print(individual_gauss(Big_X[1]).shape)
 
 
 
