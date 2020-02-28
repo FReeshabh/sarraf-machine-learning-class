@@ -20,24 +20,46 @@ for i in range(L_DATASETS):
 Big_X = np.asarray(Big_X)
 Big_t = np.asarray(Big_t)
 
-def gauss_radial_basis(in_x):
-    stddev = np.square(0.1)
-    bigger_chonk = []
-    for i in range(L_DATASETS):
-        curr_set = np.reshape(in_x[i, :], (-1, 1))
-        curr_set = np.linspace(0, 1, 25)
-        chonk = []
-        for j in range(N_DATAPOINTS):
-            curr_datapoint = curr_set[j]
-            curr_datapoint = np.exp((-np.square(curr_datapoint - curr_set)/(stddev * 2)))
-            chonk.append(curr_datapoint)
-        bigger_chonk.append(chonk)
-    chonk = np.asarray(chonk)
-    bigger_chonk = np.asarray(bigger_chonk)
-    return bigger_chonk
+# def gauss_radial_basis(in_x):
+#     stddev = np.square(0.1)
+#     bigger_chonk = []
+#     for i in range(L_DATASETS):
+#         curr_set = np.reshape(in_x[i, :], (-1, 1))
+#         curr_set = np.linspace(0, 1, 25)
+#         chonk = []
+#         for j in range(N_DATAPOINTS):
+#             curr_datapoint = curr_set[j]
+#             curr_datapoint = np.exp((-np.square(curr_datapoint - curr_set)/(stddev * 2)))
+#             chonk.append((curr_datapoint))
+#         bigger_chonk.append(chonk)
+#     
+#     chonk = np.asarray(chonk)
+#     bigger_chonk = np.asarray(bigger_chonk)
+#     return bigger_chonk
 
-    # curr_datapoint = np.column_stack((np.ones(curr_datapoint.shape), curr_datapoint))
-print(gauss_radial_basis(Big_X).shape)
+def individual_gauss(in_x):
+    stddev = np.square(0.1)
+    chonker = []
+    for i in range(N_DATAPOINTS):
+        curr_datapoint = in_x[i]
+        curr_datapoint = np.exp((-np.square(curr_datapoint - in_x)/(stddev * 2)))
+        chonker.append(curr_datapoint)
+    chonker = np.asarray(chonker)
+    feature_vector = np.column_stack((np.ones(25), chonker))
+    return feature_vector
+print(individual_gauss(X).shape)
+
+
+
+def linear_regression():
+    base = gauss_radial_basis(Big_X)
+    weights = []
+    for i in range(L_DATASETS):
+        curr_data = base[i, :, :]
+        # calculate weight over here and append it into weights
+        pass
+
+# print(gauss_radial_basis(Big_X).shape)
 # plt.plot(gauss_radial_basis(Big_X))
 # plt.show()
 
