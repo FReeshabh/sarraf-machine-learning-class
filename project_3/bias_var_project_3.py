@@ -6,6 +6,7 @@ N_DATAPOINTS = 25
 
 Big_X = []
 Big_t = []
+lambda_regularization = 1
 
 # Generate the datasets Required
 for i in range(L_DATASETS):
@@ -32,25 +33,10 @@ def radial_basis_individual(a_dataset):
     feature_vector = np.column_stack((np.ones(25), gausses_list))
     return feature_vector
 
-# print(radial_basis_individual(Big_X[1]).shape)
-# plt.plot(radial_basis_individual(Big_X[2])[2]) ##IMPORTANT: DON'T DELETE, L, N
-# plt.show()
-
-# jox = radial_basis_individual(Big_X[1])
-# jot = Big_t[1]
-# print(Big_X[1].shape)
-# lambda_reg = 0.1
-# weight =  (jox.T @ jox)   
-# chock = (np.eye(26) * lambda_reg)
-# weight = ((np.linalg.inv(weight + chock)) @ jox.T) @ jot
-# weight = np.reshape(weight, (-1, 1))
-# print(weight.shape)
-# prediction = ((Big_X[1]) @ weight)
-# print(prediction.shape)
-
 def linear_reg_with_regu(Xdataset, tDataset, reg_constant):
     lambda_reg = (np.eye(26) * reg_constant)
     predictions = []
+    weights = []
     for i in range(L_DATASETS):
         # Xdataset = np.reshape(Xdataset, (-1, 1))
         gauss_phi = radial_basis_individual(Xdataset[i])
@@ -64,5 +50,15 @@ def linear_reg_with_regu(Xdataset, tDataset, reg_constant):
         predictions.append(prediction)
 
     predictions = np.asarray(predictions)
+    predictions = predictions[:, :, 0] #Strip the array of the last dimension
     return predictions
-print(linear_reg_with_regu(Big_X, Big_t, 1).shape)
+
+f_bar = (linear_reg_with_regu(Big_X, Big_t, lambda_regularization))
+f_bars = []
+for iteration in range(L_DATASETS):
+    bar = np.mean(f_bar[i])
+    f_bars.append(bar)
+f_bars = np.asarray(f_bars)
+f_bars = np.reshape(f_bars, (-1, 1))
+print(f_bars.shape)
+
