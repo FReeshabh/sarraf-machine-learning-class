@@ -20,27 +20,6 @@ for i in range(L_DATASETS):
 Big_X = np.asarray(Big_X)
 Big_t = np.asarray(Big_t)
 
-# rbf = []
-# stddev = 0.1
-# mu_linspace = np.linspace(0, 1, 25)
-# for i in range(L_DATASETS):
-#     gauss = []
-#     curr_dataset = Big_X[i,:]
-#     curr_dataset = np.reshape(curr_dataset, (-1, 1))
-#     for j in range(N_DATAPOINTS):
-#         curr_dataset_point = curr_dataset[j]
-#         rbf_curr = np.exp((-(np.square(curr_dataset_point - mu_linspace)) / (2 * np.square(stddev))))
-#         gauss.append(rbf_curr)
-#     rbf.append(gauss)
-
-# gauss = np.asarray(gauss)
-# rbf = np.asarray(rbf)
-# # gauss = gauss[:, :, 0]
-# gauss = np.column_stack((np.ones(gauss[0].shape), gauss))
-# print(rbf.shape)
-# plt.plot(gauss[3]) # Gauss plots correctly, not rbf
-# plt.show()
-
 def radial_basis_individual(a_dataset):
     variance = np.square(0.1)
     mu_dataset = np.linspace(0, 1, 25)
@@ -53,7 +32,15 @@ def radial_basis_individual(a_dataset):
     feature_vector = np.column_stack((np.ones(25), gausses_list))
     return feature_vector
 
-print(radial_basis_individual(Big_X[1]).shape)
-
-
+# print(radial_basis_individual(Big_X[1]).shape)
+# plt.plot(radial_basis_individual(Big_X[2])[2]) ##IMPORTANT: DON'T DELETE, L, N
+jox = radial_basis_individual(Big_X[1])
+jot = Big_t[1]
+# print(jox.shape)
+lambda_reg = 0.1
+weight =  (jox.T @ jox)   
+chock = (np.eye(26) * lambda_reg)
+weight = ((np.linalg.inv(weight + chock)) @ jox.T) @ jot
+weight = np.reshape(weight, (-1, 1))
+print(weight)
     
