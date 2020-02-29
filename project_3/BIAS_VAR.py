@@ -48,13 +48,28 @@ def linear_regression(xvar, tvar):
     return weights
     
 print(linear_regression(Big_X, Big_t).shape)
-chokn = linear_regression(Big_X, Big_t)[1]
-chokn = np.reshape(chokn, (-1, 1))
-print(chokn.shape)
-conta = np.linspace(0, 1, 26) 
-conta = radial_basis(conta)
-print(conta.shape)
-songa = conta @ chokn
-print(songa.shape)
-plt.plot(songa)
-plt.show()
+
+def get_predictions():
+    Big_Prediction = []
+    linspace_X = radial_basis(np.linspace(0, 1, 25))
+    for i in range(L_DATASETS):
+        current_weight = linear_regression(Big_X, Big_t)[i]
+        current_weight = np.reshape(current_weight, (-1, 1))
+        prediction = linspace_X @ current_weight
+        Big_Prediction.append(prediction)
+    Big_Prediction = np.asarray(Big_Prediction)
+    return Big_Prediction
+
+print(get_predictions().shape)
+        
+
+# chokn = linear_regression(Big_X, Big_t)[1]
+# chokn = np.reshape(chokn, (-1, 1))
+# print(chokn.shape)
+# conta = np.linspace(0, 1, 25) # 26 
+# conta = radial_basis(conta)
+# print(conta.shape)
+# songa = conta @ chokn
+# print(songa.shape)
+# plt.plot(songa)
+# plt.show()
