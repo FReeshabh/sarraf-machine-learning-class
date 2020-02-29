@@ -32,33 +32,46 @@ def radial_basis_individual(a_dataset):
     gausses_list = np.asarray(gausses_list)
     feature_vector = np.column_stack((np.ones(25), gausses_list))
     return feature_vector
+print(radial_basis_individual(Big_X[1]).shape)
+plt.plot(radial_basis_individual(Big_X)[1][:])
+plt.show()
+# def linear_reg_with_regu(Xdataset, tDataset, reg_constant):
+#     lambda_reg = (np.eye(26) * reg_constant)
+#     # predictions = []
+#     weights = []
+#     for i in range(L_DATASETS):
+#         # Xdataset = np.reshape(Xdataset, (-1, 1))
+#         gauss_phi = radial_basis_individual(Xdataset[i])
+#         target = tDataset[i]
+#         weight = ((np.linalg.inv((gauss_phi.T @ gauss_phi) + lambda_reg)) @ gauss_phi.T) @ target
+#         # weight = np.linalg.inv((gauss_phi.T @ gauss_phi) + lambda_reg)
+#         # weight = weight @ gauss_phi.T 
+#         # weight = weight @ target
+#         # # weight = ((np.linalg.inv((gauss_phi.T @ gauss_phi) + lambda_reg)) @ gauss_phi.T) @ target
+#         weight = np.reshape(weight, (-1, 1))
+#         weights.append(weight)
+#         # # prediction = ((gauss_phi @ weight))
+#         # # predictions.append(prediction)
+#     weights = np.asarray(weight)
+#     # predictions = np.asarray(predictions)
+#     # predictions = predictions[:, :, 0] #Strip the array of the last dimension
+#     return weights
+# 
+# print((linear_reg_with_regu(Big_X, Big_t, lambda_regularization)).shape)
 
-def linear_reg_with_regu(Xdataset, tDataset, reg_constant):
-    lambda_reg = (np.eye(26) * reg_constant)
-    predictions = []
-    weights = []
-    for i in range(L_DATASETS):
-        # Xdataset = np.reshape(Xdataset, (-1, 1))
-        gauss_phi = radial_basis_individual(Xdataset[i])
-        target = tDataset[i]
-        weight = np.linalg.inv((gauss_phi.T @ gauss_phi) + lambda_reg)
-        weight = weight @ gauss_phi.T 
-        weight = weight @ target
-        # weight = ((np.linalg.inv((gauss_phi.T @ gauss_phi) + lambda_reg)) @ gauss_phi.T) @ target
-        weight = np.reshape(weight, (-1, 1))
-        prediction = ((gauss_phi @ weight))
-        predictions.append(prediction)
-
-    predictions = np.asarray(predictions)
-    predictions = predictions[:, :, 0] #Strip the array of the last dimension
-    return predictions
-
-f_bar = (linear_reg_with_regu(Big_X, Big_t, lambda_regularization))
-f_bars = []
-for iteration in range(L_DATASETS):
-    bar = np.mean(f_bar[i])
-    f_bars.append(bar)
-f_bars = np.asarray(f_bars)
-f_bars = np.reshape(f_bars, (-1, 1))
-print(f_bars.shape)
-
+# stuff = (linear_reg_with_regu(Big_X, Big_t, lambda_regularization))[1]
+# x = np.linspace(0, 1, 25)
+# plt.plot(stuff,"bo")
+# plt.show()
+# print(stuff.shape)
+#f_bar = (linear_reg_with_regu(Big_X, Big_t, lambda_regularization))
+#print(f_bar.shape)
+#f_bars = []
+#for iteration in range(L_DATASETS):
+#    bar = np.mean(f_bar[i])
+#    f_bars.append(bar)
+#f_bars = np.asarray(f_bars)
+#f_bars = np.reshape(f_bars, (-1, 1))
+#print(f_bars.shape)
+#
+#
