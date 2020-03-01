@@ -135,6 +135,24 @@ def linear_regression():
 # print(gauss.shape) 
 
 
+# print(radial_basis_individual(Big_X[1]).shape)
+# plt.plot(radial_basis_individual(Big_X[2])[2]) ##IMPORTANT: DON'T DELETE, L, N
+# plt.show()
+
+# jox = radial_basis_individual(Big_X[1])
+# jot = Big_t[1]
+# print(Big_X[1].shape)
+# lambda_reg = 0.1
+# weight =  (jox.T @ jox)   
+# chock = (np.eye(26) * lambda_reg)
+# weight = ((np.linalg.inv(weight + chock)) @ jox.T) @ jot
+# weight = np.reshape(weight, (-1, 1))
+# print(weight.shape)
+# prediction = ((Big_X[1]) @ weight)
+# print(prediction.shape)
+
+
+
 
 
 
@@ -260,3 +278,5 @@ def linear_regression():
 # plt.plot(gauss_radial_basis(Big_X))
 # plt.show()
 
+
+# print(linear_reg_with_regu(Big_X, Big_t, lambda_regularization).shape)

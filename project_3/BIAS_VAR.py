@@ -60,16 +60,62 @@ def get_predictions():
     Big_Prediction = np.asarray(Big_Prediction)
     return Big_Prediction
 
-print(get_predictions().shape)
-        
+def get_single_prediction(current_weight):
+   linspace_X = radial_basis(np.linspace(0, 1, 25))
+   current_weight = np.reshape(current_weight, (-1, 1))
+   prediction = linspace_X @ current_weight
+   return prediction
+    
+def f_x(weights):
+    f_x = 0
+    for i in range(L_DATASETS):
+        f_x += weights[i]
+    f_x = f_x / 100
+    # f_x = (np.asarray(f_x)).reshape(-1, 1)
+    return f_x
 
-# chokn = linear_regression(Big_X, Big_t)[1]
-# chokn = np.reshape(chokn, (-1, 1))
-# print(chokn.shape)
-# conta = np.linspace(0, 1, 25) # 26 
-# conta = radial_basis(conta)
-# print(conta.shape)
-# songa = conta @ chokn
-# print(songa.shape)
-# plt.plot(songa)
-# plt.show()
+# all_the_predictions = (get_predictions())[:, :, 0]
+# print(f_x(linear_regression(Big_X, Big_t)).shape)
+def bias_squared():
+    fbar = f_x(linear_regression(Big_X, Big_t))
+    bias = 0
+    for sox in range(26):
+        h = Big_t[sox]
+        bias += np.square(fbar[sox] - h)
+    bias = bias/26
+    return bias
+
+print(bias_squared().shape)
+
+# # # def xoc():
+# # #     yy = all_the_predictions
+# # #     ooo = []
+# # #     for ii in range(L_DATASETS):
+# # #         hh = np.sin(2*np.pi*Big_X[ii])
+# # #         oo = np.mean(np.square(yy-hh))
+# # #         ooo.append(oo)
+# # #     ooo = np.asarray(ooo)
+# # #     # print(ooo.shape)
+# # # 
+# # # def variance():
+# # #     sumy = np.sum(np.square(all_the_predictions))
+# # #     sumy = sumy/100
+# # #     sumo =  (sumy)/N_DATAPOINTS
+# # #     return sumo
+# # # print(variance())
+
+# print(f_x(linear_regression(Big_X, Big_t)).shape)
+
+# print(bias_2(linear_regression(Big_X, Big_t)[1], Big_X[1]).shape)
+
+# print(get_predictions().shape)
+
+
+# print(all_the_predictions.shape)
+
+# bars = []
+# for iter in range (L_DATASETS):
+#     f_bar = np.mean(all_the_predictions[iter])
+#     bars.append(f_bar)
+# bars = np.asarray(bars)
+# # print(bars.shape)
