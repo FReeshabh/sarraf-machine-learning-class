@@ -31,32 +31,32 @@ def radial_basis(a_dataset):
     gausses_list = np.column_stack((np.ones(25), gausses_list))
     return gausses_list
 
-def calculate_weight_individual(XData, tData, orig_Lambda):
-    lambda_reg = (np.eye(26) * orig_Lambda)
+def calculate_weight_individual(XData, tData, new_lamba):
+    lambda_reg = (np.eye(26) * new_lamba)
     gauss_phi = radial_basis(XData)
     weight = (np.linalg.inv((gauss_phi.T @ gauss_phi) + lambda_reg)) @ (gauss_phi.T) @ tData
     return weight
 
-def FbarOfX(XData, tData):
+def FbarOfX(XData, tData, new_lamba):
     fbar = 0
     for i in range(L_DATASETS):
-        current_weight = calculate_weight_individual(XData[i], tData[i], orig_Lambda)
+        current_weight = calculate_weight_individual(XData[i], tData[i], new_lamba)
         fbar += current_weight
     return (fbar/L_DATASETS) # average of all the weights
-print(FbarOfX(Big_X, Big_t).shape)
+# print(FbarOfX(Big_X, Big_t, ).shape)
 
-bar_f = FbarOfX(Big_X, Big_t) 
 
 Weights = []
-for datasets in range(L_DATASETS):
-    temp = calculate_weight_individual(Big_X[datasets], Big_t[datasets], orig_Lambda)
-    Weights.append(temp)
+def get_weights(lamba):
+    for datasets in range(L_DATASETS):
+        temp = calculate_weight_individual(Big_X[datasets], Big_t[datasets], lamba)
+        Weights.append(temp)
 
 new_x = np.linspace(0, 1, 25)
 new_x_basis = radial_basis(new_x)
 
-def bias_2(Fbar, basis_x, regular_x):
-    pred = basis_x @ Fbar
+def bias_2(Fbar, regular_x, new_x_basis):
+    pred = new_x_basis @ Fbar
     true_h = np.sin(2*np.pi*regular_x)
     bias2 = np.mean(np.square(pred - true_h))
     return bias2 
@@ -69,7 +69,7 @@ def variance(weights,Fbar, basis_x, regular_x):
     variance = np.sum(var) / N_DATAPOINTS
     return variance
 
-print(variance(Weights, bar_f,new_x_basis, new_x))
+# print(variance(Weights, bar_f,new_x_basis, new_x))
 
 # Test Dataset
 X_test_dataset = np.random.uniform(low = 0.0, high = 1.0, size = 1000)
@@ -81,5 +81,11 @@ variances = []
 bplusvs = []
 orig_Lambda = np.arange(np.exp(-3), np.exp(2), 0.1)
 
-# plt.show()
+for i in orig_Lambda:
+    bar_f = FbarOfX(Big_X, Big_t, i) 
+    get_weights(i)
+    BIAS = bias_2(bar_f, new_x, new_x_basis)
+    biases.append(BIAS)
+plt.plot(biases)
+plt.show()
 # logger = np.log(plt_X)

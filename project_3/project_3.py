@@ -1,120 +1,131 @@
-# Rishabh Tewari
-# R11603985
-# Machine Learning Project 3
 import numpy as np
 import matplotlib.pyplot as plt
+# Generate Data
+D = 100
 
-np.random.seed(seed = 200)
-
-"""
-a. 𝐿 = 100
-b. 𝑁 = 25
-c. 𝑋 contains samples from a uniform distribution U(0,1).
-d. 𝑡 = sin(2𝜋) + 𝜀, where 𝜀 contains samples from a Gaussian distribution
-N(0, 𝜎 =0.3).
-"""
-L_DATASETS = 100
-N_DATAPOINTS = 25
-
-Big_X = []
-Big_t = []
-
-# Generate the datasets Required
-for i in range(L_DATASETS):
-    # generate the X and t
-    X = np.random.uniform(low = 0.0, high = 1.0, size = N_DATAPOINTS)
-    t = (np.sin(2 * (np.pi) * X)) + (np.random.normal(loc = 0.0, scale = 0.3, size = X.shape))
-    # Insert the X and t into lists
-    Big_X.append(X)
-    Big_t.append(t)
-
-# Convert the lists into numpy array
-Big_X = np.asarray(Big_X)
-Big_t = np.asarray(Big_t)
-
-def phi_basis(X):
-    phier = []
-    stddev = 0.1
-    for i in range (L_DATASETS):
-        input_X = r
-        for j in range(N_DATAPOINTS):
-    rbf = np.exp((-(np.square(input_X - mean)/(2*np.square(stddev))))) # The radial Basis Function
-
-def linear_regression(x):
-    weight = (np.linalg.inv((x.T@x)))
-# def phi_rbf(input_X):
-#     stddev = 0.1 #np.std (Big_X)
-#     mean   = np.
-#     rbf = np.exp((-(np.square(input_X - mean)/(2*np.square(stddev))))) # The radial Basis Function
-#     rbf = np.reshape(rbf, (-1, 1))
-#     rbf = np.column_stack((np.ones(rbf.shape), rbf)) # Add a column of ones
-#     return rbf
-# 
-# RBF = []
-# for i in range(L_datasets):
-#     RBF.append(phi_rbf(Big_X[i, :])) # Add the phi(x) to RBF
-# 
-# RBF = np.asarray(RBF) # Convert RBF into a numpy array
-
-# # Size of the Datasets
-# N_train = 25
-# Big_dataset = []
-# Big_X = []
-# Big_T = []
-
-# for i in range(100):
-#     """
-#     Create the Datasets and generate csv files from the generated datasets
-#     """
-#     X = np.random.uniform(low = 0.0, high = 1.0, size = N_train)
-#     Big_X.append(X)
-#     t_train = (np.sin(2 * (np.pi) * X)) + (np.random.normal(loc = 0.0, scale = 0.3, size = X.shape))
-#     Big_T.append(t_train)
-#     Dataset = np.stack((X, t_train), axis = -1)
-#     file_name = "data_" + str(i) + ".csv"
-#     np.savetxt(file_name, Dataset, delimiter=",", fmt='%s')
-#     Big_dataset.append(Dataset)
-
-# Big_dataset_np = np.asarray(Big_dataset)
-# Big_X_np = np.asarray(Big_X)
-# Big_T_np = np.asarray(Big_T)
-# # print(Big_T_np.shape)
+N_train = 25
+noise_train = np.random.normal(0,0.3,(D,N_train,1))
+x_train = np.sort(np.random.uniform(0,1,(D,N_train,1)),axis=1)
+t_train = np.sin(2*np.pi*x_train) + noise_train
 
 
-# def gauss(X):
-#     dataset = X[0, :] #[i, :]
-#     mean   = np.mean(dataset)
-#     stddev = np.std(dataset)
-#     rbf = np.exp((-(np.square(dataset - mean)/(2*np.square(stddev)))))
-#     rbf = np.reshape(rbf, (-1, 1))
-#     rbf = np.column_stack((np.ones(rbf.shape), rbf))
-#     return rbf
+N_test = 1000
+noise_test = np.random.normal(0,0.3,(D,N_test,1))
+x_test = np.sort(np.random.uniform(0,1,(D,N_test,1)),axis=1)
+t_test = np.sin(2*np.pi*x_test) + noise_test
 
-# def linear_regression():
-#     lambdaX = 0.1
-#     weight = ((gauss(Big_X_np)).T @ Big_T_np[0, :]) + lambdaX
 
-# print(gauss(Big_X_np))
 
-# def gauss(X):
-#     mean = np.mean(X)
-#     stddev = np.std(X)
-#     rbf = np.exp((- np.square(X - mean)) / (2 * np.square(stddev)) )
-#     rbf = np.reshape(rbf, (-1, 1))
-#     rbf = np.column_stack(np.ones(rbf.shape))
-#     return rbf
+# Method for non-linear mapping
+def gaussian_mapping(x,M,s):
+    s = s**2
+    N = len(x)
+    phi = np.zeros((N,M))
+    loc_of_gauss = np.linspace(0,1,M)
+    for i in range(N):
+        phi[i,:] = np.exp(-1*np.power(x[i] - loc_of_gauss.T,2)/(2*s)) 
+        phi_t = np.hstack((np.ones((N,1)),phi))
+    return phi_t
 
-# print(gauss(Big_X_np[0,:]).shape)
+# Closed Form
+def train(x,t,M,lamb):
+ return np.linalg.inv(x.T@x+lamb*np.eye(M+1)) @ x.T @ t
 
-# print(Big_dataset_np[1])
+def cost_function(f_x,t):
+ cost = np.sum(np.power(f_x - t,2))
+ return cost
 
-# def phi(X):
-#     Xer = np.array(2500)
-#     for L in range(100):
-#         for N in range(25):
-#             XtoChange = X[L, N, 1]
-#             mean = np.mean()
-#             Xer = np.append(Xer, XtoChange)
-#     print(Xer.shape)
+def calculate(x_train,t,N,M,D,lambdas,plot=False):
+ x_mesh = np.linspace(0,1,N).reshape(N,1)
+ phi_mesh = gaussian_mapping(x_mesh,M,0.1)
+ f_x = []
+ y_mesh = np.zeros((len(lambdas), D, N,1))
+ w = np.zeros((len(lambdas), D,M+1,1))
+ h_x = np.sin(2*np.pi*x_mesh)
 
-# phi(Big_dataset_np)
+ for j in range(len(lambdas)):
+ for i in range(D):
+ phi_train = gaussian_mapping(x_train[i],M,0.1)
+ w[j,i,:] = train(phi_train,t[i],M,lambdas[j])
+ 
+ if plot:
+ y_mesh[j,i,:] = phi_mesh@w[j,i]
+ plt.plot(x_mesh,y_mesh[j,i,:],'r')
+ plt.ylim([-2,2])
+ plt.title('ln(lambda): ' + str(np.log(lambdas[j])))
+ if plot:
+ plt.figure()
+ f_x.append(np.mean(y_mesh[j],axis=0))
+
+ if plot:
+ for j in range(len(lambdas)):
+ plt.figure()
+ plt.plot(x_mesh, h_x,'g')
+ plt.plot(x_mesh,f_x[j],'r')
+ plt.ylim([-1.5,1.5])
+ plt.title('Average ln(lambda): ' + str(np.log(lambdas[j])))
+ return w
+
+def predict_estimate(x, lambdas, D, N, w):
+ y_estimates_test = np.zeros((len(lambdas), D, N,1))
+ phi = []
+ 
+ for i in range(D):
+ phi = gaussian_mapping(x[i],M,0.1)
+ for j in range(len(lambdas)):
+ y_estimates_test[j,i,:] = phi@w[j,i]
+# plt.plot(y_estimates_test[j,i,:])
+ return y_estimates_test
+
+def calcualte_bias_variance(w, lambdas, y_hat):
+ N = 25
+ x_mesh = np.linspace(0,1,N).reshape(N,1)
+ phi_mesh = gaussian_mapping(x_mesh,M,0.1)
+ h_x = np.sin(2*np.pi*x_mesh)
+ f_x = []
+ y = np.zeros((len(lambdas), D, N,1))
+ ln_lambdas = np.log(lambdas)
+ E = np.zeros((len(lambdas),1))
+ 
+ for j in range(len(lambdas)):
+ for i in range(D):
+ y[j,i,:] = phi_mesh@w[j,i]
+ f_x.append(np.mean(y[j],axis=0))
+ 
+ # Calculate Bias
+ bias_sq = np.zeros((len(lambdas),1))
+ for i in range(len(lambdas)):
+ bias_sq[i] = np.mean(np.power(f_x[i]-h_x,2))
+
+ # Calculate Variance
+ variance = np.zeros((len(lambdas),1))
+ for i in range(len(lambdas)):
+ variance[i] = np.mean(np.mean(np.power(y[i]-f_x[i],2),axis=0))
+ 
+ 
+ N = 1000
+ x_mesh = np.linspace(0,1,N).reshape(N,1)
+ true_avg = np.mean(t_test,0)
+ for i in range(len(lambdas)):
+ E[i] = np.sqrt(cost_function(true_avg,np.mean(y_hat[i],0))/N)
+
+ plt.plot(ln_lambdas,bias_sq,'b')
+ plt.plot(ln_lambdas,variance,'r')
+ plt.plot(ln_lambdas,bias_sq+variance,'g')
+ plt.plot(ln_lambdas,(E))
+
+ plt.legend(['(bias)^2','variance','bias^2 + variance','Test Error'])
+ plt.ylim([0, 0.15])
+
+
+
+
+M = 25
+ln_lambdas = np.linspace(-2.4,2.6,50)
+lambdas = np.exp(ln_lambdas)
+w = calculate(x_train,t_train,N_train,M,D,lambdas,False)
+
+y_hat = predict_estimate(x_test, lambdas, D, N_test, w)
+
+calcualte_bias_variance(w, lambdas,y_hat)
+plt.show()
