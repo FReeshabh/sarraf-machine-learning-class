@@ -4,7 +4,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-np.random.seed(33)
+np.random.seed(330)
 def radial_basis(a_dataset):
     stddev_2 = np.square(0.1)
     mu_dataset = np.linspace(0, 1, 25)
@@ -34,7 +34,7 @@ def f_bar_of_x(XData, tData, lamba):
     fbar = 0
     for i in range(L_DATASETS):
         current_weight = calculate_weight_individual(XData[i], tData[i], lamba)
-        # current_weight = X @ current_weight
+        current_weight = X @ current_weight #
         fbar += current_weight
     return (fbar/L_DATASETS) # average of all the weights
 
@@ -57,9 +57,11 @@ def variance(XData, tData, lamba):
     variance = np.sum(variance) / N_DATAPOINTS
     return variance
 
+
 def cost_function(prediction, target):
     loss = np.sum(np.square(prediction - target))
     return loss/1000
+
 
 L_DATASETS = 100
 N_DATAPOINTS = 25
@@ -79,6 +81,10 @@ for i in range(L_DATASETS):
 Big_X = np.asarray(Big_X)
 Big_t = np.asarray(Big_t)
 
+print(np.asarray(get_weights(0.1)).shape)
+# print(f_bar_of_x(Big_X, Big_t, 0.5 ))
+
+#
 # Test Dataset
 X_test_dataset = np.random.uniform(low = 0.0, high = 1.0, size = 1000)
 t_test_dataset = (np.sin(2 * (np.pi) * X_test_dataset)) + (np.random.normal(loc = 0.0, scale = 0.3, size = X_test_dataset.shape))
@@ -97,13 +103,13 @@ for Lambda in range_of_lambas:
 
     VARIANCE = variance(Big_X, Big_t, Lambda)
     ALL_VARIANCES.append(VARIANCE)
-# 
+#
     BIAS_PLUS_VARIANCES = BIAS + VARIANCE
     ALL_BIAS_PLUS_VARIANCES.append(BIAS_PLUS_VARIANCES)
     # cost_function((np.linalg.inv(radial_basis(X_test_dataset).T @ radial_basis(X_test_dataset))), t_test_dataset)
 
 print(ALL_BIASES)
-plt.ylim([0,0.6])
+# plt.ylim([0,0.6])
 plt.xlabel('ln(lambda)')
 plt.title('Bias-Variance Decomposition')
 plt.plot(np.log(range_of_lambas), ALL_BIASES, label="$(BIAS)^2$", color = "blue")

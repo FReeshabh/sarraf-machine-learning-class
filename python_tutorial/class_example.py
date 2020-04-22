@@ -1,5 +1,4 @@
 class Vehicle:
-
     def __init__(self, make, name, year,
                  is_electric=False, price=100):
         self.name = name
