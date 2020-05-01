@@ -74,10 +74,10 @@ def PART_1():
         plt.plot(C_INPUT, C_OUTPUT, label = "Target value", linestyle = None)
         plt.show()
 
-    graph_loss_part_1(costs)
+    # graph_loss_part_1(costs)
     # print(*prediction_layer)
-    # plt.plot(costs) # Error Cost
-    # plt.show()
+    plt.plot(costs) # Error Cost
+    plt.show()
 PART_1()
 
 def PART_2():
